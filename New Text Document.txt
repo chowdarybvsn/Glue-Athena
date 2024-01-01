@@ -1,0 +1,33 @@
+# Create a Glue Job
+resource "aws_glue_job" "example_job" {
+  name     = "example_job"
+  role_arn = "arn:aws:iam::account-id:role/glue-service-role"  # Replace with the ARN of your Glue service role
+
+  command {
+    name = "glueetl"
+    python_version = "3"
+    script_location = "s3://your-scripts-bucket/your-script.py"  # Replace with the path to your ETL script in S3
+  }
+
+  default_arguments = {
+    "--job-language" = "python"
+    "--script-venv"  = "s3://your-scripts-bucket/your-virtualenv.zip"  # Replace with the path to your virtual environment zip file in S3
+  }
+
+  max_retries = 0
+}
+
+# Create a Glue Connection
+resource "aws_glue_connection" "example_connection" {
+  name = "example_connection"
+  physical_connection_requirements {
+    availability_zone = "us-east-1a"
+    security_group_id_list = ["sg-0123456789abcdef0"]
+    subnet_id = "subnet-0123456789abcdef0"
+  }
+  connection_properties = {
+    JDBC_CONNECTION_URL = "jdbc:mysql://your-database-host:3306/your-database"
+    PASSWORD            = "your-database-password"
+    USERNAME            = "your-database-username"
+  }
+}
