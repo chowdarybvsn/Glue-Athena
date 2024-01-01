@@ -1,9 +1,7 @@
 name: Display File Contents
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch
 
 jobs:
   display_contents:
