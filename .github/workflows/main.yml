@@ -10,30 +10,14 @@ on:
       - master
       - feature
 jobs:
-  upload_contents:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
-
-    - name: Save File as Artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: my-artifact
-        path: glue-test.json
-
   terraform-master:
-    needs: upload_contents
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch'
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Download Artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: my-artifact
+      
       - name: Install AWS CLI
         run: |
           sudo apt-get update
