@@ -5,15 +5,15 @@ variable "bucket_names" {
 
 resource "aws_s3_bucket" "example" {
   for_each = toset(var.bucket_names)
-  bucket = each.value
+  bucket   = each.value
 }
 
 resource "aws_s3_object" "example_object" {
   for_each = aws_s3_bucket.example
 
   bucket = aws_s3_bucket.example[element(keys(aws_s3_bucket.example), 0)].bucket
-  key    = "glue-test.json"  # Specify the desired key for the uploaded file
-  source = "D:\\AWS\\Glue-Athena-test\\glue-test.json"  # Replace with the local path to your file
+  key    = "glue-test.json"                            # Specify the desired key for the uploaded file
+  source = "D:\\AWS\\Glue-Athena-test\\glue-test.json" # Replace with the local path to your file
   acl    = "private"
 }
 
@@ -26,9 +26,9 @@ resource "aws_glue_catalog_database" "example_database" {
 resource "aws_glue_crawler" "example_crawler" {
   name          = "example_crawler"
   database_name = aws_glue_catalog_database.example_database.name
-  role          = "arn:aws:iam::631231558475:role/gluerole"  # Replace with the ARN of your Glue service role
+  role          = "arn:aws:iam::631231558475:role/gluerole" # Replace with the ARN of your Glue service role
   s3_target {
-    path = "${aws_s3_bucket.example[element(keys(aws_s3_bucket.example), 0)].bucket}/"  # Replace with the path to your data in S3 s3://cbx-covid19-input/
+    path = "${aws_s3_bucket.example[element(keys(aws_s3_bucket.example), 0)].bucket}/" # Replace with the path to your data in S3 s3://cbx-covid19-input/
   }
 }
 
@@ -53,11 +53,11 @@ resource "time_sleep" "wait_for_crawler" {
 
 # Use the obtained table name in subsequent resources
 resource "aws_athena_named_query" "example_named_query" {
-  name         = "example_named_query"
-  database     = aws_glue_catalog_database.example_database.name
-  query        = "SELECT * FROM cbx_covid19_input"
-  description  = "Example Athena Named Query"           
-  workgroup    = "primary"
+  name        = "example_named_query"
+  database    = aws_glue_catalog_database.example_database.name
+  query       = "SELECT * FROM cbx_covid19_input"
+  description = "Example Athena Named Query"
+  workgroup   = "primary"
 }
 
 # Run Athena Query using local-exec provisioner
@@ -68,5 +68,5 @@ resource "null_resource" "run_athena_query" {
     EOT
     #working_dir = path.module  # Set the working directory to the location of your Terraform script
   }
-  depends_on = [aws_athena_named_query.example_named_query] 
+  depends_on = [aws_athena_named_query.example_named_query]
 }
