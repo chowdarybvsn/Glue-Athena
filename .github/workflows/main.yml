@@ -81,6 +81,20 @@ jobs:
           echo "[default]" > ~/.aws/credentials
           echo "aws_access_key_id=${AWS_ACCESS_KEY_ID}" >> ~/.aws/credentials
           echo "aws_secret_access_key=${AWS_SECRET_ACCESS_KEY}" >> ~/.aws/credentials
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: my-artifact
+          path: D:\AWS\Glue-Athena-test\glue-test.json
+          
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: my-artifact
+          path: D/AWS/Glue-Athena-test/
           
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
