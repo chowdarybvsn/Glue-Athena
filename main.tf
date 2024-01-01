@@ -13,7 +13,7 @@ resource "aws_s3_object" "example_object" {
 
   bucket = aws_s3_bucket.example[element(keys(aws_s3_bucket.example), 0)].bucket
   key    = "glue-test.json"             # Specify the desired key for the uploaded file
-  source = "my-artifact/glue-test.json" # Replace with the local path to your file
+  source = "${path.module}/my-artifact/glue-test.json" # Replace with the local path to your file
   acl    = "private"
 }
 
