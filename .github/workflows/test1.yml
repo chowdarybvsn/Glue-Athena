@@ -1,0 +1,17 @@
+name: Display File Contents
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  display_contents:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Print File Contents
+      run: cat glue-test.json
