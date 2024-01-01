@@ -36,7 +36,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: my-artifact
-          path: D:\\AWS\\Glue-Athena-test\\glue-test.json
+          path: 'D:/AWS/Glue-Athena-test/glue-test.json'
           
       - name: Checkout code
         uses: actions/checkout@v2
